@@ -139,7 +139,7 @@ p{padding: 5px 0;}
 	text-decoration: none;
 }
 
-#header ul.menu li.active a{
+#header ul.menu a.active{
 	color:#fff;
 	border-right:solid 1px #cfb53b;
 	background:#d8a903;
