@@ -1,21 +1,42 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
+import axios from 'axios';
+
 import Footer from './Footer';
+import HeaderLogo from './HeaderLogo';
+
+import PARAMS from '../Constants';
 
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-    	topMenuList: [],
-    	leftMenuList: []
+    	pages: [],
+    	categories: []
 
     }
   }    
 
+  getMenuList = (link) => {
+  	console.log("Get menu function");
+	const url = `${PARAMS.API_URL}${link}/`;
+
+	axios.get(`${url}`)
+      .then(({data, status}) => {
+    	console.log("status", status);
+    	console.log("data", data);
+
+    	if (status === 200 && data){
+    		const {categories, pages} = data
+    		this.setState({categories, pages});
+    	}
+	})
+  }
+
   componentWillMount() {
-  	console.log('Will Mount');
-  	
+  	this.getMenuList('links');
+  	// this.getMenuList('categories');
   }
 
   render() { 
@@ -25,40 +46,38 @@ class App extends Component {
   		<Router>
 			<div id="main">
 				<div id="header">
-					<div class="header-main">
-						<div class="header-logo">
-							<a href="/"><img src="images/logo.png" alt="Gold-sim.com.ua" /></a>
-						</div>
-						<div class="header-phone">
+					<div className="header-main">
+						<HeaderLogo />
+						<div className="header-phone">
 							<span >(098) 00-55-6-55, (063) 966-89-89</span>
 						</div>
-						<div class="header-basket ">
+						<div className="header-basket ">
 								<a href="#">
 								<span><b>1</b> товар&nbsp;&nbsp;Сумма: <b>100 грн</b></span>
 								</a>
 						</div>											
-						<div class="header-search">
+						<div className="header-search">
 							<form action="" method="get">
 								<input 
 									name="keyword" 
 									alt="Поиск" 
-									class="header-search-box" 
+									className="header-search-box" 
 									type="text" 
 									size="20" 
 									placeholder="Поиск..."
-									autocomplete="off"
+									autoComplete="off"
 								/>
-								<button class="header-search-button">Найти</button>
+								<button className="header-search-button">Найти</button>
 								<input type="hidden" name="limitstart" value="0" />
 								<input type="hidden" name="option" value="com_virtuemart" />
 								<input type="hidden" name="view" value="category" />
 							</form>
 						</div>
 					</div>
-					<ul class="menu">
+					<ul className="menu">
 						<div>
 							<li>
-								<a href="/"  class="active">Главная</a>
+								<a href="/"  className="active">Главная</a>
 							</li>
 							<li>
 								<a href="/dostavka-i-oplata/">Оплата и доставка</a>
@@ -68,22 +87,22 @@ class App extends Component {
 							</li>
 						</div>		
 					</ul>
-					<div class="clear"></div>
+					<div className="clear"></div>
 				</div>
 				<div id="content">
-					<div class="container" onclick="this.classList.toggle('change'); document.getElementById('mobile-menu').classList.toggle('active');">
-						<div class="bar1"></div>
-						<div class="bar2"></div>
-						<div class="bar3"></div>
+					<div className="container" onClick="this.classList.toggle('change'); document.getElementById('mobile-menu').classList.toggle('active');">
+						<div className="bar1"></div>
+						<div className="bar2"></div>
+						<div className="bar3"></div>
 					</div>
-					<div class="clear"></div>
-					<div class="content-menu" id="mobile-menu">
+					<div className="clear"></div>
+					<div className="content-menu" id="mobile-menu">
 
-						<ul class="menu">
+						<ul className="menu">
 							<li>
 								<a href="/ks/" >Номера Киевстар</a>
 							</li>
-							<div class="menu-sub">
+							<div className="menu-sub">
 								<li>
 									<a href="/068/" >068</a>
 								</li>
@@ -114,9 +133,9 @@ class App extends Component {
 							</li>
 						</ul>
 					</div>
-					<div class="content-text">
+					<div className="content-text">
 						<h1>Добро пожаловать на сайт красивых номеров телефонов!</h1>
-						<div class="content-page">
+						<div className="content-page">
 							<p>Представляем Вам <strong>коллекцию красивых номеров операторов КИЕВСТАР, МТС, Life:)</strong> в Украине.</p>
 							<p>В последнее время все большей популярностю пользуються красивые номера, золотые номера или вип номера мобильных телефонов.<br /><i><strong>Какой же он, золотой номер?</strong></i> Называют красивые номера по-разному, но каждый человек индивидуален, поэтому и золотой номер у каждого человека свой.&nbsp;</p>
 							<p>Выбирая красивый номер телефона, каждый полагается на свои ассоциации и приследует свою причину выбора. Успешные люди всегда хотят быть первыми во всем, поэтому их золотой номер обязательно будет содержать в себе единицы или цифры, которые отображают "полноту", это девятки, восьмерки, семерки.</p>
@@ -135,7 +154,7 @@ class App extends Component {
 							<p>Всегда рады Вашим предложениям и пожеланиям!</p> 
 						</div>
 					</div>
-					<div class="clear"></div>
+					<div className="clear"></div>
 				</div>
 			</div>
   		</Router>
