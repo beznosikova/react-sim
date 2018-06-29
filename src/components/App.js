@@ -6,7 +6,7 @@ import Footer from './Footer';
 import HeaderLogo from './HeaderLogo';
 import HeaderPhone from './HeaderPhone';
 import TopMenu from './TopMenu';
-import LeftMenu from './LeftMenu';
+import LeftMenuWrapper from './LeftMenuWrapper';
 import Page from './Page';
 
 import PARAMS from '../Constants';
@@ -77,15 +77,7 @@ class App extends Component {
 					<div className="clear"></div>
 				</div>
 				<div id="content">
-					<div className="container" onClick="this.classList.toggle('change'); document.getElementById('mobile-menu').classList.toggle('active');">
-						<div className="bar1"></div>
-						<div className="bar2"></div>
-						<div className="bar3"></div>
-					</div>
-					<div className="clear"></div>
-					<div className="content-menu" id="mobile-menu">
-						<LeftMenu items={categories}/>
-					</div>
+					<LeftMenuWrapper items={categories}/>
 
 					{pages.map((page) => {
 						let pathString = (page.mainPage) ? '/' : `/${page.alias}/`;
@@ -112,4 +104,3 @@ class App extends Component {
 }
 
 export default App;
-
