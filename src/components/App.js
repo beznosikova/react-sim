@@ -8,6 +8,7 @@ import HeaderPhone from './HeaderPhone';
 import TopMenu from './TopMenu';
 import LeftMenuWrapper from './LeftMenuWrapper';
 import Page from './Page';
+import ProductsList from './ProductsList';
 
 import PARAMS from '../Constants';
 
@@ -48,24 +49,24 @@ class App extends Component {
 
 	recurtionCategoriesRoutes = (item) => {
 
-		const ret = (item.alias) ? (							
+		const route = (item.alias) ? (							
 			<Route  
 				key={`route_cat_${item.id}`}
 				path={`/${item.alias}/`} 
-				render={()=><p>{item.title}</p>}
+				render={()=><ProductsList category={item.alias} h1={item.h1}/>}
 			/>) : false;
 
 		if (item.subCategories){
 			const { subCategories } = item;
 		 	return (
 		 		<Switch key={`switch_cat_${item.id}`}>
-		 			{ret}
+		 			{route}
 			 		{subCategories.map((subItem) => this.recurtionCategoriesRoutes(subItem))}
 		 		</Switch>
 		 	);
 		} 
 
-		return ret;
+		return route;
 	}  
 
 	componentWillMount() {
