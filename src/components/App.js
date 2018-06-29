@@ -6,6 +6,7 @@ import Footer from './Footer';
 import HeaderLogo from './HeaderLogo';
 import HeaderPhone from './HeaderPhone';
 import TopMenu from './TopMenu';
+import LeftMenu from './LeftMenu';
 import Page from './Page';
 
 import PARAMS from '../Constants';
@@ -39,7 +40,7 @@ class App extends Component {
   }
 
   render() { 
-  	const {pages} = this.state;
+  	const {pages, categories} = this.state;
   	
   	return (
   		<div>
@@ -83,41 +84,7 @@ class App extends Component {
 					</div>
 					<div className="clear"></div>
 					<div className="content-menu" id="mobile-menu">
-
-						<ul className="menu">
-							<li>
-								<a href="/ks/" >Номера Киевстар</a>
-							</li>
-							<div className="menu-sub">
-								<li>
-									<a href="/068/" >068</a>
-								</li>
-								<li>
-									<a href="/096/" >096</a>
-								</li>
-								<li>
-									<a href="/097/" >097</a>
-								</li>
-								<li>
-									<a href="/098/" >098</a>
-								</li>
-								<li>
-									<a href="/butterfly/" >Номера &quot;Бабочки&quot;</a>
-								</li>
-								<li>
-									<a href="/nomera-s-tysyachami/" >Номера с тысячами</a>
-								</li>
-								<li>
-									<a href="/rasprodazha/" >Распродажа номеров</a>
-								</li>
-							</div>
-							<li>
-								<a href="/mts/" >Номера Vodafone</a>
-							</li>
-							<li>
-								<a href="/pary-nomerov/" >Пары номеров</a>
-							</li>
-						</ul>
+						<LeftMenu items={categories}/>
 					</div>
 
 					{pages.map((page) => {
