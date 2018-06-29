@@ -27,7 +27,7 @@ class LeftMenuWrapper extends Component {
 					<div className="bar3"></div>
 				</div>
 				<div className="clear"></div>
-				<div className={`content-menu ${menuClass}`} id="mobile-menu">
+				<div className={`content-menu ${menuClass}`}>
 					<LeftMenu items={items}/>
 				</div>
 			</div>
