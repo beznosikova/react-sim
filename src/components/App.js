@@ -9,6 +9,7 @@ import TopMenu from './TopMenu';
 import LeftMenuWrapper from './LeftMenuWrapper';
 import Page from './Page';
 import ProductsList from './ProductsList';
+import SearchLine from './SearchLine';
 
 import PARAMS from '../Constants';
 
@@ -18,8 +19,10 @@ class App extends Component {
 		super(props);
 		this.state = {
 			pages: [],
-			categories: []
+			categories: [],
+			searchWord: null
 		}
+		this.routerRef = React.createRef();
 	}    
 
 	getMenuList = () => {
@@ -69,16 +72,23 @@ class App extends Component {
 		return route;
 	}  
 
+	onSubmitSearching(_values, _form){
+		_form.reset();
+		const { searchWord } = _values;
+		this.setState({searchWord});
+		this.routerRef.current.history.push(`/search/`);
+	}	
+
 	componentWillMount() {
 		this.getMenuList();
 	}
 
 	render() { 
-	  	const {pages, categories} = this.state;
+	  	const {pages, categories, searchWord} = this.state;
 	  	
 	  	return (
 	  		<div>
-	  		<Router>
+	  		<Router ref={this.routerRef}>
 				<div id="main">
 					<div id="header">
 						<div className="header-main">
@@ -91,20 +101,7 @@ class App extends Component {
 									{/*</a>*/}
 							</div>	
 
-							<div className="header-search">
-								<form action="" method="get">
-									<input 
-										name="keyword" 
-										alt="Поиск" 
-										className="header-search-box" 
-										type="text" 
-										size="20" 
-										placeholder="Поиск..."
-										autoComplete="off"
-									/>
-									<button className="header-search-button">Найти</button>
-								</form>
-							</div>
+							<SearchLine onSubmit={this.onSubmitSearching.bind(this)}/>
 						</div>
 
 						<TopMenu items={pages}/>
@@ -113,7 +110,12 @@ class App extends Component {
 					<div id="content">
 						<LeftMenuWrapper items={categories}/>
 						{pages.map((page) => this.pagesRoutes(page))}	
-						{categories.map((category) => this.recurtionCategoriesRoutes(category))}								
+						{categories.map((category) => this.recurtionCategoriesRoutes(category))}
+						<Route  
+							key="search_route"
+							path={`/search/`} 
+							render={()=><ProductsList category={searchWord} search={true} h1="Страница поиска"/>}
+						/>						
 						<div className="clear"></div>
 					</div>
 				</div>

@@ -23,14 +23,20 @@ class ProductsList extends Component {
 
 	componentWillMount() {
 		this.getProducts(1);
+	}
+
+	componentWillReceiveProps() {
+	    this.setState({ productsList:[], hasMore:true, changedSort: true });
 	}	
 
 	getProducts(page){
-		const { category } = this.props;
+		const { category, search } = this.props;
 		const { productsList, sort } = this.state;
-		const url = `${PARAMS.API_URL}products/${category}/${page}/${sort}/`;
-		console.log("url", url);
+		const pageType = (search) ? "search" : "products";
 
+		if (!category) return false;
+		const url = `${PARAMS.API_URL}${pageType}/${category}/${page}/${sort}/`;
+		
 		axios.get(`${url}`)
 		  .then(({data, status}) => {
 			if (status === 200 && data){
@@ -46,8 +52,8 @@ class ProductsList extends Component {
 	}	
 
 	render() {
-		console.log('render:', this.state);
-		const { h1 } = this.props;
+
+		const { h1, search, category } = this.props;
 		const { productsList, hasMore, sort, changedSort} = this.state;
 		const loader = <div className="loader" key="loading-div"></div>;
 
@@ -75,7 +81,8 @@ class ProductsList extends Component {
 					  />
 				</div>
 				<div className="clear"></div>
-
+				{search && category && <p>Строка поиска {category}</p>}
+				{search && !category && <p>Введите строку поиска</p>}
 				
 					{
 					productsList.length ? (
