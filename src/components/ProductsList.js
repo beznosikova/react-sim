@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroller';  
+import Select from 'react-select';
+import '../css/select.css';
 
 import ProductCard from './ProductCard';
 import PARAMS from '../Constants';
@@ -11,9 +13,12 @@ class ProductsList extends Component {
 		super(props);
 		this.state = {
 		  productsList:[],
-		  hasMore:true
+		  sort:"title-asc",
+		  hasMore:true,
+		  changedSort:false
 		}
 		this.getProducts = this.getProducts.bind(this);
+		this.handleChange = this.handleChange.bind(this);
 	}    
 
 	componentWillMount() {
@@ -22,32 +27,37 @@ class ProductsList extends Component {
 
 	getProducts(page){
 		const { category } = this.props;
-		const { productsList } = this.state;
-		const url = `${PARAMS.API_URL}products/${category}/${page}/`;
+		const { productsList, sort } = this.state;
+		const url = `${PARAMS.API_URL}products/${category}/${page}/${sort}/`;
+		console.log("url", url);
 
 		axios.get(`${url}`)
 		  .then(({data, status}) => {
 			if (status === 200 && data){
-				console.log("data", data);
-				if (data.length)
-					this.setState({productsList: [...productsList, ...data]});
-				else 
-					this.setState({hasMore: false});
+				(data.length) && this.setState({productsList: [...productsList, ...data]});
+				(!data.length) && this.setState({hasMore: false});
 			}
 		})		
 	}
 
-	render() {
+	handleChange = (sort) => {
+		const sortValue = sort.value;
+		this.setState({ sort:sortValue, productsList:[], hasMore:true, changedSort: true });
+	}	
 
+	render() {
+		console.log('render:', this.state);
 		const { h1 } = this.props;
-		const { productsList, hasMore } = this.state;
-		const loader = <div className="loader"></div>;
+		const { productsList, hasMore, sort, changedSort} = this.state;
+		const loader = <div className="loader" key="loading-div"></div>;
 
 		let page = 1;
 
 		let items = null;
 		if (productsList.length){
 		  items = productsList.map(item => <ProductCard	key={`product_${item.id}`} product={item} />)
+		} else if(changedSort) {
+			this.getProducts(1);
 		}
 
 		return (
@@ -55,13 +65,16 @@ class ProductsList extends Component {
 				<h1>{h1}</h1>
 
 				<div className="content-sort">
-					<span>сортировка</span>
-					<select name="sort" id="sort-product">
-						<option value="price_asc">от дешевых</option>
-						<option value="price_desc">от дорогих</option>
-						<option value="name_asc">по названию</option>
-					</select>
+					<Select
+					    name="sort"
+					    value={sort}
+					    onChange={this.handleChange}
+					    options={PARAMS.SORT}
+					    clearable={false}
+					    className="select-sort"
+					  />
 				</div>
+				<div className="clear"></div>
 
 				
 					{
@@ -77,16 +90,8 @@ class ProductsList extends Component {
 					        {items}
 						</div>	
 					  </InfiniteScroll>
-					) : (<div className="loader"></div>)
-					}	
-								
-{/*					{productsList.map((product) => (
-							<ProductCard  
-								key={`product_${product.id}`}
-								product={product}
-							/>						
-						))}		*/}											
-				
+					) : (<div></div>)
+					}
 			</div>
 		);
 	}

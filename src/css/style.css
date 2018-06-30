@@ -315,9 +315,9 @@ ul.menu-sub > li:last-of-type{
     100% { transform: rotate(360deg); }
 }
 
-/* .content-products{
-	padding: 10px 10px;
-	display: flex;
-    flex-wrap: wrap;
-    align-items: stretch;
-} */
+.select-sort{
+    float:right;
+    width:50%;
+    margin-top: 5px;
+}
+
