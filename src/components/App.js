@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { connect } from "react-redux";
 import axios from 'axios';
 
 import Footer from './Footer';
@@ -10,6 +11,9 @@ import LeftMenuWrapper from './LeftMenuWrapper';
 import Page from './Page';
 import ProductsList from './ProductsList';
 import SearchLine from './SearchLine';
+
+import { addToOrder } from "../actions/addToOrder";
+import { deleteFromOrder } from "../actions/deleteFromOrder";
 
 import PARAMS from '../Constants';
 
@@ -56,7 +60,11 @@ class App extends Component {
 			<Route  
 				key={`route_cat_${item.id}`}
 				path={`/${item.alias}/`} 
-				render={()=><ProductsList category={item.alias} h1={item.h1}/>}
+				render={()=><ProductsList 
+								category={item.alias} 
+								h1={item.h1}
+								{... this.props}
+							/>}
 			/>) : false;
 
 		if (item.subCategories){
@@ -85,7 +93,7 @@ class App extends Component {
 
 	render() { 
 	  	const {pages, categories, searchWord} = this.state;
-	  	
+	  	// console.log(this.props);
 	  	return (
 	  		<div>
 	  		<Router ref={this.routerRef}>
@@ -97,7 +105,7 @@ class App extends Component {
 
 							<div className="header-basket empty">
 									{/*<a href="#">*/}
-									<span><b>1</b> товар&nbsp;&nbsp;Сумма: <b>100 грн</b></span>
+									<span><b>{this.props.orderList.list.length}</b> товар&nbsp;&nbsp;Сумма: <b>100 грн</b></span>
 									{/*</a>*/}
 							</div>	
 
@@ -114,7 +122,11 @@ class App extends Component {
 						<Route  
 							key="search_route"
 							path={`/search/`} 
-							render={()=><ProductsList category={searchWord} search={true} h1="Страница поиска"/>}
+							render={()=><ProductsList 
+											category={searchWord} 
+											search={true} 
+											h1="Страница поиска"
+										/>}
 						/>						
 						<div className="clear"></div>
 					</div>
@@ -127,4 +139,21 @@ class App extends Component {
 	}
 }
 
-export default App;
+
+const mapStateToProps = state =>({
+  		orderList: state.orderList,
+	});
+
+const mapDispatchToProps = dispatch => ({
+  onAddOrder: item => {
+    dispatch(addToOrder(item));
+  },
+  onDeleteOrder: (idx) => {
+    dispatch(deleteFromOrder(idx));
+  }  
+});
+
+// export default App;
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
+

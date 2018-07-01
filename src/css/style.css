@@ -273,17 +273,25 @@ ul.menu-sub > li:last-of-type{
   margin-top: 5px;
 }
 
-.product-order{
-	background: #fff url(../images/cart_small.png) no-repeat 10px 1px;
+.product-order,
+.product-order-del {
 	transition: background 1s;
     height: 32px;
     width: 42px;
     cursor: pointer;
 }
 
+.product-order{background: #fff url(../images/cart_small.png) no-repeat 10px 1px;}
+.product-order-del{background: #fff url(../images/cart_del_small.png) no-repeat 10px 1px;}
+
 .product-order:hover{
 	background: #fff url(../images/cart_small.png) no-repeat 0px 1px;
 	transition: background .5s;
+}
+
+.product-order-del:hover{
+    background: #fff url(../images/cart_del_small.png) no-repeat 0px 1px;
+    transition: background .5s;
 }
 
 .product-send-mail{

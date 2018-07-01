@@ -26,7 +26,7 @@ class ProductsList extends Component {
 	}
 
 	componentWillReceiveProps() {
-	    this.setState({ productsList:[], hasMore:true, changedSort: true });
+	    // this.setState({ productsList:[], hasMore:true, changedSort: true });
 	}	
 
 	getProducts(page){
@@ -52,8 +52,8 @@ class ProductsList extends Component {
 	}	
 
 	render() {
-
-		const { h1, search, category } = this.props;
+		// console.log("render Product List");
+		const { h1, search, category, onAddOrder, onDeleteOrder, orderList } = this.props;
 		const { productsList, hasMore, sort, changedSort} = this.state;
 		const loader = <div className="loader" key="loading-div"></div>;
 
@@ -61,7 +61,13 @@ class ProductsList extends Component {
 
 		let items = null;
 		if (productsList.length){
-		  items = productsList.map(item => <ProductCard	key={`product_${item.id}`} product={item} />)
+		  items = productsList.map(item => <ProductCard	
+		  										key={`product_${item.id}`} 
+		  										product={item} 
+		  										onAddOrder={onAddOrder}
+		  										onDeleteOrder={onDeleteOrder}
+		  										orderList={orderList}
+		  										/>)
 		} else if(changedSort) {
 			this.getProducts(1);
 		}

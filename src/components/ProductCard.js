@@ -1,10 +1,13 @@
 import React from "react";
 import PARAMS from '../Constants';
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, onAddOrder, onDeleteOrder, orderList }) => {
 	
 	const { url } = (product.image) ? product.image : false;
 	const price = +product.price;
+	const isInOrder = orderList.list.filter(item => item.id === product.id);
+	// console.log("product", product.id, isInOrder);
+
 
 	return (
 		<div className="product-wrapper">
@@ -19,7 +22,10 @@ const ProductCard = ({ product }) => {
 			    <div className="price">
 			    	<span>{price} грн</span>
 		    		{product.reserve && <button className="product-send-mail">&nbsp;</button>}
-		    		{!product.reserve && <button className="product-order">&nbsp;</button>}
+		    		{!product.reserve && 
+		    			((!isInOrder.length && <button className="product-order" onClick={()=>onAddOrder(product)}>&nbsp;</button>) ||
+		    			(isInOrder.length && <button className="product-order-del" onClick={()=>onDeleteOrder(product.id)}>&nbsp;</button>))
+		    		}
 			    </div>
 			</div>
 		</div>
