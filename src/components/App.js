@@ -6,6 +6,7 @@ import axios from 'axios';
 import Footer from './Footer';
 import HeaderLogo from './HeaderLogo';
 import HeaderPhone from './HeaderPhone';
+import HeaderBasket from './HeaderBasket';
 import TopMenu from './TopMenu';
 import LeftMenuWrapper from './LeftMenuWrapper';
 import Page from './Page';
@@ -92,7 +93,8 @@ class App extends Component {
 	}
 
 	render() { 
-	  	const {pages, categories, searchWord} = this.state;
+	  	const { pages, categories, searchWord } = this.state;
+	  	const { orderList } = this.props;
 	  	// console.log(this.props);
 	  	return (
 	  		<div>
@@ -102,13 +104,7 @@ class App extends Component {
 						<div className="header-main">
 							<HeaderLogo />
 							<HeaderPhone />
-
-							<div className="header-basket empty">
-									{/*<a href="#">*/}
-									<span><b>{this.props.orderList.list.length}</b> товар&nbsp;&nbsp;Сумма: <b>100 грн</b></span>
-									{/*</a>*/}
-							</div>	
-
+							<HeaderBasket orderList={orderList}/>
 							<SearchLine onSubmit={this.onSubmitSearching.bind(this)}/>
 						</div>
 
