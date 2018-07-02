@@ -6,6 +6,10 @@ body {
 
 h1, h2, h3{color:#d8a903;}
 h1{font-size: 20px;}
+h2{
+    font-size: 18px;
+    padding: 10px 0;
+}
 
 a {color:#c08f04;}
 a:hover {
@@ -329,3 +333,12 @@ ul.menu-sub > li:last-of-type{
     margin-top: 5px;
 }
 
+.order-delivery{
+    border: 1px solid white;
+    border-radius: 10px;
+    padding: 20px 20px;
+    background-color: #fcd08e42;
+}
+
+.order-price{text-align: right;}
+.order-price>p{border-bottom: 1px solid #ddd;}

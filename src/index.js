@@ -10,13 +10,12 @@ import './css/reset.css';
 import './css/style.css';
 import './css/media.css';
 
-import { loadState, saveState } from './localStorage'
+import { loadState, saveState } from './utils/localStorage'
 import reducers from "./reducers";
 import App from './components/App';
 import registerServiceWorker from './registerServiceWorker';
 
 const localStorageState = loadState();
-
 
 const store = createStore(
   reducers,
