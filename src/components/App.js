@@ -12,6 +12,7 @@ import LeftMenuWrapper from './LeftMenuWrapper';
 import Page from './Page';
 import ProductsList from './ProductsList';
 import SearchLine from './SearchLine';
+import OrderList from './OrderList';
 
 import { addToOrder } from "../actions/addToOrder";
 import { deleteFromOrder } from "../actions/deleteFromOrder";
@@ -123,7 +124,12 @@ class App extends Component {
 											search={true} 
 											h1="Страница поиска"
 										/>}
-						/>						
+						/>	
+						<Route  
+							key="order_route"
+							path={`/order/`} 
+							render={()=><OrderList {...this.props}/>}
+						/>											
 						<div className="clear"></div>
 					</div>
 				</div>
