@@ -123,6 +123,7 @@ class App extends Component {
 											category={searchWord} 
 											search={true} 
 											h1="Страница поиска"
+											{...this.props}
 										/>}
 						/>	
 						<Route  

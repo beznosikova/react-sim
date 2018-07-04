@@ -15,23 +15,27 @@ class ProductsList extends Component {
 		  productsList:[],
 		  sort:"title-asc",
 		  hasMore:true,
-		  changedSort:false
+		  changedSort:false,
+		  _prevCategory:null
 		}
 		this.getProducts = this.getProducts.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 	}    
 
 	componentWillMount() {
+		this.setState({'_category':this.props.category});
 		this.getProducts(1);
 	}
 
 	componentWillReceiveProps() {
-	    // this.setState({ productsList:[], hasMore:true, changedSort: true });
+		const { category } = this.props;
+		const { _prevCategory } = this.state;
+		this.setState({_prevCategory: category})
 	}	
 
 	getProducts(page){
 		const { category, search } = this.props;
-		const { productsList, sort } = this.state;
+		const { productsList, sort, _prevCategory} = this.state;
 		const pageType = (search) ? "search" : "products";
 
 		if (!category) return false;
@@ -39,9 +43,12 @@ class ProductsList extends Component {
 		
 		axios.get(`${url}`)
 		  .then(({data, status}) => {
-			if (status === 200 && data){
-				(data.length) && this.setState({productsList: [...productsList, ...data]});
-				(!data.length) && this.setState({hasMore: false});
+			if (status === 200){
+			  	console.log("axios", data, status);
+			  	if (data.length)
+			  		this.setState({productsList: [...productsList, ...data]});
+			  	else
+					this.setState({hasMore: false, changedSort: false});
 			}
 		})		
 	}
@@ -52,10 +59,18 @@ class ProductsList extends Component {
 	}	
 
 	render() {
-		// console.log("render Product List");
 		const { h1, search, category, onAddOrder, onDeleteOrder, orderList } = this.props;
-		const { productsList, hasMore, sort, changedSort} = this.state;
+		const { productsList, hasMore, sort, changedSort, _prevCategory} = this.state;
 		const loader = <div className="loader" key="loading-div"></div>;
+
+		if (category !== _prevCategory && search){
+			this.setState({ 
+				productsList:[], 
+				hasMore:true, 
+				changedSort: true, 
+				_prevCategory:category
+			})
+		}
 
 		let page = 1;
 
