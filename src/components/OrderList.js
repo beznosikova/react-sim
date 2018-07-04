@@ -3,35 +3,20 @@ import { withRouter } from "react-router-dom";
 import { Box } from "smooth-ui";
 import axios from 'axios';
 
-// import ApiNovaPochta from 'yz-react-deliveri-newpochta';
-
 import ProductCard from './ProductCard';
 import OrderForm from './OrderForm';
 import PARAMS from '../Constants';
 
 class OrderList extends Component {
-	// NP = new ApiNovaPochta();
 
 	constructor(props) {
 		super(props);
 		this.state = {
 		  deliveryType: "ukr_post",
-		  flashMessage: false
+		  flashMessage: ""
 		}
 		this.onSubmitHandle = this.onSubmitHandle.bind(this);
-		// this.handleChange = this.handleChange.bind(this);
 	}    
-
-	componentWillMount() {
-
-		// this.NP.getAreas((data) => { 
-		// 	console.log(data);
-		// }, PARAMS.API_KEY_NP);		
-	}
-
-	componentWillReceiveProps() {
-
-	}	
 
 	getDeliveryName = (deliveryValue) => {	
 		if (!deliveryValue)	return false;
@@ -41,8 +26,8 @@ class OrderList extends Component {
 	}
 
 	async onSubmitHandle(_values, _form){
-		const { list } = this.props.orderList;
-		const productsPrice = this.calcOrderPrice(list);
+		const list = this.props.orderList.list.map((item) => ({id:item.id, title:item.title}));
+		const productsPrice = this.calcOrderPrice(this.props.orderList.list);
 		const deliveryPrice = PARAMS.DELIVERY_PRICE[_values.delivery];
 
 		const { onClearOrder } = this.props;
@@ -51,9 +36,6 @@ class OrderList extends Component {
 		let values = {};
 		values = {..._values, list, productsPrice, deliveryPrice }
 		values.delivery = this.getDeliveryName(_values.delivery);
-		console.log("onSubmit", values);
-		console.log("list", JSON.stringify(list));
-		
 
        try {
 			const response = await axios.post(
@@ -64,13 +46,18 @@ class OrderList extends Component {
 		    );
 
 			console.log(response);
-			if (response.status === 200){
-					// _form.reset();
-					// onClearOrder();
-					// this.setState({flashMessage: true})
-					
-					// setTimeout(() => push('/'), 10000);  		
-			}           
+			if (response.status === 200 && !('error' in response['data'])){
+				onClearOrder();
+				this.setState({flashMessage: "Заказ оформлен! В ближайшее время з Вами свяжеться менеджер."})
+				
+				setTimeout(() => push('/'), 10000);  		
+			} 
+
+			if ('error' in response['data']){
+				this.setState({flashMessage: response['data']['error']})
+			}
+			_form.reset();
+
         } catch (err) {
            console.log(err);
         }
@@ -81,24 +68,22 @@ class OrderList extends Component {
 	}
 
 	render() {
-		console.log("render Order List");
-		
+
 		const { orderList } = this.props;
 		const { deliveryType, flashMessage } = this.state;
 		const orderPrice = this.calcOrderPrice(orderList.list);
 		const hasOrder = orderList.list.length > 0;
-		const infoText = (flashMessage) ? "Заказ оформлен! В ближайшее время з Вами свяжеться менеджер." : "Корзина пуста";
-		// console.log("orderPrice", orderPrice);
+		const infoText = (flashMessage.length) ? flashMessage : (!hasOrder) ? "Корзина пуста" : "";
 
 		return (
 			<div className="content-text">
 				<h1>Корзина</h1>
 
-				{!hasOrder && (
+				{(infoText.length) ? (
 					<Box margin="10px 0" justifyContent="Center">
 						<p>{infoText}</p>
 					</Box>
-					)}
+					) : ""}
 
 				{hasOrder &&
 					(<div>

@@ -10,7 +10,7 @@ const PARAMS = {
   DELIVERY_TYPES:[
 	{ value: 'ukr_post', label: 'Укрпочта - рекомендованное письмо' },
 	{ value: 'nova_pochta', label: 'Новая почта - оплата на карточку' },
-	{ value: 'nova_pochta_np', label: 'Новая почта - наложенный платеж - опалата при получении' },
+	{ value: 'nova_pochta_np', label: 'Новая почта - наложенный платеж - оплата при получении' },
   ],
   DELIVERY_PRICE:{
 	 ukr_post: 12,

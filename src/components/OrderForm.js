@@ -1,25 +1,15 @@
 import React from 'react'
-// import { Select as ReactSelect } from 'react-select';
-// import '../css/select.css';
 import { Form } from 'react-final-form'
 import { Field } from 'react-final-form-html5-validation'
 import {
   Box,
   Button,
-  // Checkbox,
-  // Col,
   ControlFeedback,
-  // FormCheck,
-  // FormCheckLabel,
   FormGroup,
   Input,
   Label,
-  // Radio,
-  // RadioGroup,
-  // Row,
   Select,
   Textarea,
-  // Typography
 } from "smooth-ui";
 
 import PARAMS from '../Constants';
@@ -30,7 +20,6 @@ const adapt = Component => ({
   children,
   ...rest
 }) => {
-  // console.log("valid", valid);
   children = (error && touched)? <ControlFeedback valid={false}>{error}</ControlFeedback> : "";
   return <div><Component {...input} {...rest} />{children}</div>
 };
@@ -39,13 +28,17 @@ const AdaptedInput = adapt(Input);
 const AdaptedSelect = adapt(Select);
 const AdaptedTextarea = adapt(Textarea);
 
-const UkrPostForm = ({onSubmit, initialValues, orderPrice}) => (
-  
+const OrderForm = ({onSubmit, initialValues, orderPrice}) => {
+
+  return (
     <Form
       initialValues={initialValues}
       onSubmit={onSubmit}
       render={({ handleSubmit, reset, submitting, pristine, values }) => {
 
+        const isUkrPost = values.delivery === "ukr_post";
+        const isPaymentCard = values.delivery !== "nova_pochta_np";
+        
         return (
         <form onSubmit={handleSubmit}>
     
@@ -57,6 +50,7 @@ const UkrPostForm = ({onSubmit, initialValues, orderPrice}) => (
               placeholder="Имя получателя"
               required
               minLength={3}
+              maxLength={20}
               tooShort="Имя должно быть длиннее"
               valueMissing="Введите имя, пожалуйста!"
               control
@@ -70,6 +64,7 @@ const UkrPostForm = ({onSubmit, initialValues, orderPrice}) => (
               placeholder="Фамилия получателя"
               required
               minLength={3}
+              maxLength={20}
               tooShort="Фамилия должна быть длиннее"
               valueMissing="Введите фамилию, пожалуйста!"
               control
@@ -98,55 +93,71 @@ const UkrPostForm = ({onSubmit, initialValues, orderPrice}) => (
               control
             />
           </FormGroup>      
-          {values.delivery === "ukr_post" && 
-            (<div className="order-delivery">
+          
+          <div className="order-delivery">
+            <FormGroup>
+              <Field
+                name="postIndex"
+                component={AdaptedInput}
+                type="text"
+                placeholder={(isUkrPost) ? `Индекс` : `Номер отделения`}
+                required
+                valueMissing={(isUkrPost) ? `Введите почтовый индекс, пожалуйста!` : `Введите номер отделения, пожалуйста!`}
+                pattern={(isUkrPost) ? `[0-9]{5}` : `[0-9]{1,3}`}
+                patternMismatch="Ввод не правильный"
+                maxLength={(isUkrPost) ? 5 : 3}
+                control
+              />
+            </FormGroup>
+            <FormGroup>
+              <Field
+                name="city"
+                component={AdaptedInput}
+                type="text"
+                placeholder="Населенный пункт"
+                required
+                valueMissing="Введите населенный пункт, пожалуйста!"
+                minLength={2}
+                tooShort="Слишком короткое название"
+                control
+              />              
+            </FormGroup>              
+            <FormGroup>
+              <Field
+                name="address"
+                component={AdaptedInput}
+                type="text"
+                placeholder="Адрес"
+                required
+                valueMissing="Введите адрес, пожалуйста!"
+                minLength={10}
+                tooShort="Слишком короткий адрес"
+                control
+              />              
+            </FormGroup>
+            {!isUkrPost && (
               <FormGroup>
                 <Field
-                  name="postIndex"
+                  name="phone"
                   component={AdaptedInput}
                   type="text"
-                  placeholder="Индекс"
+                  placeholder="(068)-777-77-77"
                   required
-                  valueMissing="Введите почтовый индекс, пожалуйста!"
-                  pattern="[0-9]{5}"
-                  patternMismatch="Почтовый индекс введен не правильно"
-                  control
-                />
-              </FormGroup>
-              <FormGroup>
-                <Field
-                  name="city"
-                  component={AdaptedInput}
-                  type="text"
-                  placeholder="Населенный пункт"
-                  required
-                  valueMissing="Введите населенный пункт, пожалуйста!"
-                  minLength={5}
-                  tooShort="Слишком короткое название"
-                  control
-                />              
-              </FormGroup>              
-              <FormGroup>
-                <Field
-                  name="address"
-                  component={AdaptedInput}
-                  type="text"
-                  placeholder="Адрес"
-                  required
-                  valueMissing="Введите адрес, пожалуйста!"
-                  minLength={5}
-                  tooShort="Слишком короткий адрес"
+                  valueMissing="Введите телефон, пожалуйста!"
+                  pattern="[\s+0-9()-]{10,18}"
+                  patternMismatch="Ввод не правильный"
                   control
                 />              
             </FormGroup>
-            <ControlFeedback valid={false}>Оплата на карточку: реквизиты прийдут на e-mail.</ControlFeedback>
-            </div>
+              )}
+            <ControlFeedback valid={false}>
+                {(isPaymentCard)? `Оплата на карточку: реквизиты прийдут на e-mail.` 
+                  : `Оплата при получении в отделении Новой почты.`}
+            </ControlFeedback>
+          </div>
 
-            )
-          }
-
-            <FormGroup>
-              <Label>Примечания к заказу</Label>
+          <FormGroup>
+            <Label>Примечания к заказу</Label>
               <Field
                 name="notes"
                 component={AdaptedTextarea}
@@ -168,12 +179,11 @@ const UkrPostForm = ({onSubmit, initialValues, orderPrice}) => (
               Заказать
             </Button>
           </Box>
-          <pre>{JSON.stringify(values, 0, 2)}</pre>
         </form>
       )}
       }
     />
 )
+}
 
-
-export default UkrPostForm;
+export default OrderForm;
