@@ -6,6 +6,8 @@ export default function orderList(state = {list:[]}, action) {
 		  	return {list: [...list, action.payload]};
 		case "DELETE_ORDER":
 		  	return {list: [...list.filter(item => item.id !== action.payload)]};
+		case "CLEAR_ORDER":
+		  	return {list: []};		  	
 		default:
 			return state;
 	}

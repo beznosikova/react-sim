@@ -4,3 +4,9 @@ export const deleteFromOrder = idx => dispatch => {
     payload: idx
   });
 };
+
+export const clearOrder = () => dispatch => {
+  dispatch({
+    type: "CLEAR_ORDER",
+  });
+};

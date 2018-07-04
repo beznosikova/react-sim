@@ -15,7 +15,7 @@ import SearchLine from './SearchLine';
 import OrderList from './OrderList';
 
 import { addToOrder } from "../actions/addToOrder";
-import { deleteFromOrder } from "../actions/deleteFromOrder";
+import { deleteFromOrder, clearOrder } from "../actions/deleteFromOrder";
 
 import PARAMS from '../Constants';
 
@@ -152,10 +152,11 @@ const mapDispatchToProps = dispatch => ({
   },
   onDeleteOrder: (idx) => {
     dispatch(deleteFromOrder(idx));
-  }  
+  },
+  onClearOrder: (idx) => {
+    dispatch(clearOrder());
+  },
 });
-
-// export default App;
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
 

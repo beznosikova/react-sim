@@ -36,8 +36,6 @@ const adapt = Component => ({
 };
 
 const AdaptedInput = adapt(Input);
-// const AdaptedCheckbox = adapt(Checkbox);
-// const AdaptedRadio = adapt(Radio);
 const AdaptedSelect = adapt(Select);
 const AdaptedTextarea = adapt(Textarea);
 
@@ -52,7 +50,6 @@ const UkrPostForm = ({onSubmit, initialValues, orderPrice}) => (
         <form onSubmit={handleSubmit}>
     
           <FormGroup>
-            {/*<Label>Имя</Label>*/}
             <Field
               name="firstName"
               component={AdaptedInput}
@@ -93,7 +90,7 @@ const UkrPostForm = ({onSubmit, initialValues, orderPrice}) => (
             />
           </FormGroup>
           <FormGroup>
-            <Label>Выберите способ доставки</Label>
+            <Label>Выберите способ доставки и оплаты</Label>
             <Field
               name="delivery"
               component={AdaptedSelect}
@@ -118,7 +115,7 @@ const UkrPostForm = ({onSubmit, initialValues, orderPrice}) => (
               </FormGroup>
               <FormGroup>
                 <Field
-                  name="cities"
+                  name="city"
                   component={AdaptedInput}
                   type="text"
                   placeholder="Населенный пункт"
@@ -170,9 +167,6 @@ const UkrPostForm = ({onSubmit, initialValues, orderPrice}) => (
               >
               Заказать
             </Button>
-            {/*<button type="submit" disabled={submitting || pristine}>
-              Submit
-            </button>*/}
           </Box>
           <pre>{JSON.stringify(values, 0, 2)}</pre>
         </form>
