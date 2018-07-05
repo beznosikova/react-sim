@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+// import { IndexRedirect } from "react-router";
 import { connect } from "react-redux";
 import axios from 'axios';
 
@@ -131,11 +132,7 @@ class App extends Component {
 							path={`/order/`} 
 							render={()=><OrderList {...this.props}/>}
 						/>	
-						<Route 
-							path="*" 
-							exact
-							render={()=><NotFound />}
-						/>	
+						<Route component={NotFound}/>
 						</Switch>		
 						<div className="clear"></div>
 					</div>

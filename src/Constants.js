@@ -1,6 +1,8 @@
 const PARAMS = {
   API_URL: "http://sym.test/api/",
   IMAGE_URL: "http://sym.test",
+  // API_URL: "/api/",
+  // IMAGE_URL: "",
   SORT:[
 	{ value: 'title-asc', label: 'по возрастанию' },
 	{ value: 'title-desc', label: 'по убыванию' },

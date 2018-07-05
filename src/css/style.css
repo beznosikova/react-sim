@@ -337,7 +337,7 @@ ul.menu-sub > li:last-of-type{
     border: 1px solid white;
     border-radius: 10px;
     padding: 20px 20px;
-    background-color: #fcd08e42;
+    background: #fcd08e42;
 }
 
 .order-price{text-align: right;}

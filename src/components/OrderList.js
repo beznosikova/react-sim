@@ -39,8 +39,8 @@ class OrderList extends Component {
 
        try {
 			const response = await axios.post(
-				// 'http://sym.test/web/app_dev.php/api/order/', 
-				PARAMS.API_URL+'order/', 
+				'http://sym.test/web/app_dev.php/api/order/', 
+				// PARAMS.API_URL+'order/', 
 				values, 
 				{ headers: {'Content-Type': 'application/json',}}
 		    );
