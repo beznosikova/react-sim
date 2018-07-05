@@ -44,7 +44,7 @@ class ProductsList extends Component {
 		axios.get(`${url}`)
 		  .then(({data, status}) => {
 			if (status === 200){
-			  	console.log("axios", data, status);
+
 			  	if (data.length)
 			  		this.setState({productsList: [...productsList, ...data]});
 			  	else

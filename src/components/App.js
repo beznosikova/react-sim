@@ -13,6 +13,7 @@ import Page from './Page';
 import ProductsList from './ProductsList';
 import SearchLine from './SearchLine';
 import OrderList from './OrderList';
+import NotFound from './NotFound';
 
 import { addToOrder } from "../actions/addToOrder";
 import { deleteFromOrder, clearOrder } from "../actions/deleteFromOrder";
@@ -62,6 +63,7 @@ class App extends Component {
 			<Route  
 				key={`route_cat_${item.id}`}
 				path={`/${item.alias}/`} 
+				exact
 				render={()=><ProductsList 
 								category={item.alias} 
 								h1={item.h1}
@@ -71,12 +73,7 @@ class App extends Component {
 
 		if (item.subCategories){
 			const { subCategories } = item;
-		 	return (
-		 		<Switch key={`switch_cat_${item.id}`}>
-		 			{route}
-			 		{subCategories.map((subItem) => this.recurtionCategoriesRoutes(subItem))}
-		 		</Switch>
-		 	);
+			return subCategories.map((subItem) => this.recurtionCategoriesRoutes(subItem));
 		} 
 
 		return route;
@@ -114,10 +111,12 @@ class App extends Component {
 					</div>
 					<div id="content">
 						<LeftMenuWrapper items={categories}/>
-						{pages.map((page) => this.pagesRoutes(page))}	
+						<Switch>
 						{categories.map((category) => this.recurtionCategoriesRoutes(category))}
+						{pages.map((page) => this.pagesRoutes(page))}	
 						<Route  
 							key="search_route"
+							exact
 							path={`/search/`} 
 							render={()=><ProductsList 
 											category={searchWord} 
@@ -128,9 +127,16 @@ class App extends Component {
 						/>	
 						<Route  
 							key="order_route"
+							exact
 							path={`/order/`} 
 							render={()=><OrderList {...this.props}/>}
-						/>											
+						/>	
+						<Route 
+							path="*" 
+							exact
+							render={()=><NotFound />}
+						/>	
+						</Switch>		
 						<div className="clear"></div>
 					</div>
 				</div>

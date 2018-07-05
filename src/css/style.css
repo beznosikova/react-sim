@@ -342,3 +342,6 @@ ul.menu-sub > li:last-of-type{
 
 .order-price{text-align: right;}
 .order-price>p{border-bottom: 1px solid #ddd;}
+
+.content-page a:link, a:visited{color: #515151;}
+.content-page a:hover{color: #515151;}
